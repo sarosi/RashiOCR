@@ -42,12 +42,12 @@ def resize_img(img, max_height=24, box_side=32, save_to_file=False, filename=Non
     plt.show()
     
     #normalize image
-    normalized = np.zeros((80, 80))
-    normalized = cv2.normalize(resized, normalized, 0, 255, cv2.NORM_MINMAX)
+    #normalized = np.zeros((80, 80))
+    #normalized = cv2.normalize(resized, normalized, 0, 255, cv2.NORM_MINMAX)
     
-    print('Normalized Dimensions: ', normalized.shape)
-    plt.imshow(normalized)
-    plt.show()
+    #print('Normalized Dimensions: ', normalized.shape)
+    #plt.imshow(normalized)
+    #plt.show()
     
     #add padding to image, center them in 32*32
     if height == width:
@@ -69,7 +69,7 @@ def resize_img(img, max_height=24, box_side=32, save_to_file=False, filename=Non
     if save_to_file:
         cv2.imwrite(filename, resized_with_padding)
             
-path = 'letters_samples1_final'
+path = 'letters_IMG_7569'
 
 folder_to_save = path + '/resized/'
 for idx, fname in enumerate(os.listdir(path)):

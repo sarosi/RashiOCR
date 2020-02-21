@@ -14,10 +14,10 @@ import numpy as np
 from matplotlib import pyplot as plt
 import os
 
-newdirname = "letters_IMG_7548__"
+newdirname = "letters_IMG_7569"
 os.makedirs(newdirname)
 
-img = cv2.imread('images/IMG_7548.jpg')
+img = cv2.imread('images/IMG_7569.jpg')
 gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 gray_img = cv2.GaussianBlur(gray_img, (5,5), 0)
 ret, im_th = cv2.threshold(gray_img, 90, 255, cv2.THRESH_BINARY_INV)

@@ -14,7 +14,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 import os
 
-img_name = "IMG_7548"
+img_name = "IMG_7569"
 img_ext = "jpg"
 img = cv2.imread("images/" + img_name + "." + img_ext)
 gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
