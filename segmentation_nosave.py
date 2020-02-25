@@ -14,7 +14,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 import os
 
-img_name = "IMG_7569"
+img_name = "IMG_7610"
 img_ext = "jpg"
 img = cv2.imread("images/" + img_name + "." + img_ext)
 gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -77,10 +77,11 @@ joined_rect = False
 last_rect_was_joined = False
 
 for idx,rect in enumerate(rects):
-    #intersection over union (needed because of the small part of quf and hey)
-    print("->", idx, "---", rect)
-    if area_of(rect) < 100:
+    #filter out too small (probably noise, or dot) or too big (probably more than one letters) 
+    if area_of(rect) < 600 or area_of(rect) > 12000:
         continue
+    print("->", idx, "---", rect)
+    #intersection over union (needed because of the small part of quf and hey)
     iou = iou_of(rect, next_rect)
     if iou >= 0.01 and iou <= 0.8:
         x,y,h,w = join_rects_of(rect, next_rect)
@@ -89,6 +90,10 @@ for idx,rect in enumerate(rects):
     else:
         x,y,h,w = rect[:]
         joined_rect = False
+        
+    #wider ones are suspicious, rashi letters are taller than wider
+    if h > w:
+        continue
 
     if not last_rect_was_joined:
         cv2.rectangle(img,(x, y), (x + h, y + w), (0,255,0), 2)

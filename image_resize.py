@@ -16,11 +16,16 @@ import os
 
 def resize_img(img, max_height=24, box_side=32, save_to_file=False, filename=None):
     
-    print('Original Dimensions : ',img.shape)
+    print('Original dimensions: ', img.shape)
      
-    plt.imshow(img)
-    plt.show()
+    #plt.imshow(img)
+    #plt.show()
+
+    #grayscale image
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    print('Grayscaled dimensions: ', gray.shape)
     
+    # resize image
     height = img.shape[0]
     width = img.shape[1]
     
@@ -34,12 +39,12 @@ def resize_img(img, max_height=24, box_side=32, save_to_file=False, filename=Non
         height = int(img.shape[0] * scale_ratio)
     
     dim = (width, height)
-    # resize image
-    resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
+    resized = cv2.resize(gray, dim, interpolation = cv2.INTER_AREA)
     
-    print('Resized Dimensions : ',resized.shape) 
-    plt.imshow(resized)
-    plt.show()
+    
+    print('Resized dimensions: ', resized.shape) 
+    #plt.imshow(resized)
+    #plt.show()
     
     #normalize image
     #normalized = np.zeros((80, 80))
@@ -61,7 +66,7 @@ def resize_img(img, max_height=24, box_side=32, save_to_file=False, filename=Non
             r = r+1
         
     resized_with_padding = cv2.copyMakeBorder(resized.copy(),t,b,l,r, cv2.BORDER_CONSTANT,value=[255,255,255])
-    print('Resized with padding Dimensions:', resized_with_padding.shape )
+    print('Resized with padding dimensions:', resized_with_padding.shape )
     plt.imshow(resized_with_padding)
     plt.show()
     
@@ -69,13 +74,12 @@ def resize_img(img, max_height=24, box_side=32, save_to_file=False, filename=Non
     if save_to_file:
         cv2.imwrite(filename, resized_with_padding)
             
-path = 'letters_IMG_7569'
-
+path = 'extracted_letters/letters_cong'
 folder_to_save = path + '/resized/'
 for idx, fname in enumerate(os.listdir(path)):
     image = cv2.imread(path + '/' + fname, cv2.IMREAD_UNCHANGED)
     if not image is None:
-        filename_to_save = folder_to_save+str(idx)+'.jpg'
+        filename_to_save = folder_to_save+'/cong1_' + str(idx)+ '.jpg'
         resize_img(image, max_height=24, box_side=32, save_to_file=True, filename=filename_to_save)
 
 

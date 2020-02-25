@@ -10,14 +10,15 @@ import sys
 sys.path.append('/usr/local/lib/python3.7/site-packages')
 
 import cv2
-import numpy as np
 from matplotlib import pyplot as plt
 import os
 
-newdirname = "letters_IMG_7569"
-os.makedirs(newdirname)
-
-img = cv2.imread('images/IMG_7569.jpg')
+newdirname = "extracted_letters/letters_cong"
+#os.makedirs(newdirname)
+img_dir = 'images'
+img_name = 'IMG_7610'
+img_ext = 'jpg'
+img = cv2.imread(img_dir + '/' + img_name + '.' + img_ext)
 gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 gray_img = cv2.GaussianBlur(gray_img, (5,5), 0)
 ret, im_th = cv2.threshold(gray_img, 90, 255, cv2.THRESH_BINARY_INV)
@@ -77,18 +78,23 @@ next_rect = cv2.boundingRect(sorted_ctrs[-1])
 joined_rect = False
 last_rect_was_joined = False
 for idx,rect in enumerate(rects):
-    #intersection over union (needed because of the small part of quf and hey)
-    print("->", idx, "---", rect)
-    if area_of(rect) < 16:
+    #filter out too small (probably noise, or dot) or too big (probably more than one letters) 
+    if area_of(rect) < 1100 or area_of(rect) > 9000:
         continue
+    print("->", idx, "---", rect)
+    #intersection over union (needed because of the small part of quf and hey)
     iou = iou_of(rect, next_rect)
-    if iou >= 0.1 and iou <= 0.8:
+    if iou >= 0.01 and iou <= 0.8:
         x,y,h,w = join_rects_of(rect, next_rect)
         print("   joined rect_final=", x,y,h,w)
         joined_rect = True
     else:
         x,y,h,w = rect[:]
         joined_rect = False
+        
+    #wider ones are suspicious, rashi letters are taller than wider
+    if h > w:
+        continue
 
     if not last_rect_was_joined:
         #cv2.rectangle(img,(x, y), (x + h, y + w), (0,255,0), 2)
@@ -97,7 +103,7 @@ for idx,rect in enumerate(rects):
         length = int(h * 1.6)
         roi = img[y-2:y+w, x-2:x+h]
         rois.append(roi)
-        filename =  newdirname + "/" + str(len(rois)-1) + ".jpg"
+        filename =  newdirname + "/" + img_name + '_' + str(len(rois)-1) + ".jpg"
         if roi.size > 0:
             plt.imshow(roi)
             plt.show()
