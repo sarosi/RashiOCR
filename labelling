@@ -13,6 +13,7 @@ import cv2
 from matplotlib import pyplot as plt
 import os
 import re
+import csv
 
 def sorted_alphanumeric(data):
     convert = lambda text: int(text) if text.isdigit() else text.lower()
@@ -47,21 +48,44 @@ def full_name_of(character):
             600: "mem_sofit",
             700: "nun_sofit",
             800: "pe_sofit",
-            900: "tzadi_sofit"
+            900: "tzadi_sofit",
+            1001: "pas",
+            1002: "paspas"
     }
     return switcher.get(character, "no such letter")
     
-path = 'dataset/train/img'
 
-for idx, fname in enumerate(sorted_alphanumeric(os.listdir(path))):
-    print(fname)
-    image = cv2.imread(path + '/' + fname, cv2.IMREAD_UNCHANGED)
-    plt.imshow(image)
-    plt.show()
+def name_it():
     lbl = int(input('Name the letter! '))
-    print(full_name_of(lbl))
-    #TODO: if confirmed by enter, write it in csv as first column and the rest is the image
-    #      if not confirmed, ask again
+    char_name = full_name_of(lbl)
+    print(char_name)
+    return char_name
+
+
+path = 'dataset/train/img'    
+
+with open('train.csv', 'w', newline='') as csvfile: 
+    for idx, fname in enumerate(sorted_alphanumeric(os.listdir(path))):
+        print(fname)
+        image = cv2.imread(path + '/' + fname, cv2.IMREAD_UNCHANGED)
+        plt.imshow(image)
+        plt.show()
+        
+        ok = True
+        while True:
+            char_name = name_it()
+            if input('Hit ENTER if sure!'):
+                fieldnames = ['Label', 'Filename']
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer.writeHeader()
+                writer.writerow({'Label': char_name, 'Filename': 'fname'})
+                print(char_name + ' is saved for ' + fname)
+            else:
+                break
+            
+        #TODO: if confirmed by enter, write it in csv as first column and the rest is the image
+        #      if not confirmed, ask again
+    
         
     
     
