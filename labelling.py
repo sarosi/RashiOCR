@@ -12,8 +12,10 @@ sys.path.append('/usr/local/lib/python3.7/site-packages')
 import cv2
 from matplotlib import pyplot as plt
 import os
+from os import path
 import re
 import csv
+import helper
 
 def sorted_alphanumeric(data):
     convert = lambda text: int(text) if text.isdigit() else text.lower()
@@ -62,27 +64,32 @@ def name_it():
     return char_name
 
 
-path = 'dataset/train/img'    
+path_to_images = 'dataset/train/img'
+csvname = 'dataset/train/train.csv'
 
-with open('dataset/train/train.csv', 'w', newline='') as csvfile: 
-    for idx, fname in enumerate(sorted_alphanumeric(os.listdir(path))):
-        if idx>6:
-            print(fname)
-            image = cv2.imread(path + '/' + fname, cv2.IMREAD_UNCHANGED)
-            plt.imshow(image)
-            plt.show()
-            
-            ok = True
-            while True:
-                char_name = name_it()
-                if input('Hit ENTER if sure!'):
-                    break
-                else:
-                    fieldnames = ['Label', 'Filename']
-                    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-                    writer.writeheader()
-                    writer.writerow({'Label': char_name, 'Filename': 'fname'})
-                    print(char_name + ' is saved for ' + fname)
+with open(csvname, 'a', newline='') as csvfile: 
+    for idx, fname in enumerate(sorted_alphanumeric(os.listdir(path_to_images))):
+        if idx <= 341:
+            continue
+        if fname == '.DS_Store':
+            continue
+        fieldnames = ['Label', 'Filename']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        #writer.writeheader()
+
+        print(fname)
+        image = cv2.imread(path_to_images + '/' + fname, cv2.IMREAD_GRAYSCALE)
+        if not helper.isbw(image):
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        plt.imshow(image)
+        plt.show()
+        
+        char_name = name_it()
+        if input('Hit ENTER if sure!'):
+            break
+        else:
+            writer.writerow({'Label': char_name, 'Filename': fname})
+            print(char_name + ' is saved for ' + fname)
             
         #TODO: if confirmed by enter, write it in csv as first column and the rest is the image
         #      if not confirmed, ask again
