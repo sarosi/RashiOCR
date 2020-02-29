@@ -67,33 +67,34 @@ def name_it():
 path_to_images = 'dataset/train/img'
 csvname = 'dataset/train/train.csv'
 
-with open(csvname, 'a', newline='') as csvfile: 
-    for idx, fname in enumerate(sorted_alphanumeric(os.listdir(path_to_images))):
-        if idx <= 341:
-            continue
-        if fname == '.DS_Store':
-            continue
-        fieldnames = ['Label', 'Filename']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        #writer.writeheader()
-
-        print(fname)
-        image = cv2.imread(path_to_images + '/' + fname, cv2.IMREAD_GRAYSCALE)
-        if not helper.isbw(image):
-            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        plt.imshow(image)
-        plt.show()
-        
-        char_name = name_it()
-        if input('Hit ENTER if sure!'):
-            break
-        else:
-            writer.writerow({'Label': char_name, 'Filename': fname})
-            print(char_name + ' is saved for ' + fname)
-            
-        #TODO: if confirmed by enter, write it in csv as first column and the rest is the image
-        #      if not confirmed, ask again
+def label_them(path_to_images, csvname, start_index):
+    with open(csvname, 'a', newline='') as csvfile: 
+        for idx, fname in enumerate(sorted_alphanumeric(os.listdir(path_to_images))):
+            if idx <= start_index:
+                continue
+            if fname == '.DS_Store':
+                continue
+            fieldnames = ['Label', 'Filename']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            #writer.writeheader()
     
+            print(fname)
+            image = cv2.imread(path_to_images + '/' + fname, cv2.IMREAD_GRAYSCALE)
+            if not helper.isbw(image):
+                image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            plt.imshow(image)
+            plt.show()
+            
+            char_name = name_it()
+            if input('Hit ENTER if sure!'):
+                break
+            else:
+                writer.writerow({'Label': char_name, 'Filename': fname})
+                print(char_name + ' is saved for ' + fname)
+                
+            #TODO: if confirmed by enter, write it in csv as first column and the rest is the image
+            #      if not confirmed, ask again
         
+label_them('dataset/train/img', 'dataset/train/train.csv', 397)
     
     
