@@ -70,7 +70,7 @@ csvname = 'dataset/train/train.csv'
 def label_them(path_to_images, csvname, start_index):
     with open(csvname, 'a', newline='') as csvfile: 
         for idx, fname in enumerate(sorted_alphanumeric(os.listdir(path_to_images))):
-            if idx <= start_index:
+            if idx < start_index:
                 continue
             if fname == '.DS_Store':
                 continue
@@ -92,9 +92,8 @@ def label_them(path_to_images, csvname, start_index):
                 writer.writerow({'Label': char_name, 'Filename': fname})
                 print(char_name + ' is saved for ' + fname)
                 
-            #TODO: if confirmed by enter, write it in csv as first column and the rest is the image
-            #      if not confirmed, ask again
+            #TODO: fix the confirmation bug
         
-label_them('dataset/train/img', 'dataset/train/train.csv', 397)
+label_them('dataset/train/img', 'dataset/train/train.csv', 1301)
     
     
