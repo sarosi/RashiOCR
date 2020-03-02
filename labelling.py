@@ -94,6 +94,6 @@ def label_them(path_to_images, csvname, start_index):
                 
             #TODO: fix the confirmation bug
         
-label_them('dataset/train/img', 'dataset/train/train.csv', 1301)
+label_them('dataset/train/img', 'dataset/train/train.csv', 1347)
     
     
