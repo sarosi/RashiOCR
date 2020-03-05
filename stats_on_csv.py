@@ -35,4 +35,5 @@ def show_images_of_letter(letter):
         plt.show()
 
 
-show_images_of_letter('chaf_sofit')
+#show_images_of_letter('ayin')
+show_stats()
