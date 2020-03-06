@@ -23,17 +23,20 @@ def show_stats():
 
 def show_images_of_letter(letter):
     rows_of_letter = df.loc[df['Label'] == letter]
-    #print(rows_of_letter)
-    #print(len(rows_of_letter))
-    for row in rows_of_letter.iterrows():
+    for idx, row in enumerate(rows_of_letter.iterrows()):
+        print(idx+1, '/', len(rows_of_letter))
         print(row[1][1])
         if '.jpg' not in row[1][1]:
             continue
-
         image = cv2.imread('dataset/train/img/' + row[1][1], cv2.IMREAD_GRAYSCALE)
         plt.imshow(image)
         plt.show()
 
 
-#show_images_of_letter('ayin')
+#show_images_of_letter('samech')
 show_stats()
+
+#1747: tet -> mem_sofit
+#18, 178, 303, 360, 408, 429, 431, 571, 712, 865 -> samech
+#4, 80, 119, 182, 193, 199, 228, 243, 308, 349, 394, 404, 407, 444, 509, 519, 534, 540,
+#614, 678, 730, 771, 844, 847, 849, 874, 971, 2021, 2069 -> meme_sofit 
