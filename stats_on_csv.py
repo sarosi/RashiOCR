@@ -33,7 +33,7 @@ def show_images_of_letter(letter):
         plt.show()
 
 
-#show_images_of_letter('samech')
+#show_images_of_letter('aleph')
 show_stats()
 
 #1747: tet -> mem_sofit

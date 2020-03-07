@@ -94,10 +94,10 @@ def label_them(path_to_images, csvname, start_index):
                 
             #TODO: fix the confirmation bug
         
-label_them('dataset/train/img', 'dataset/train/train.csv', 4001)
+label_them('dataset/train/img', 'dataset/train/train.csv', 4602)
     
     #1592, 1715, 1747, 1822, 1828, 1829, 1876, 2042, 2069, 2263, 2317,
     #2695, 2907, 2944, 2963, 3001, 3161, 3180, 3234, 3301, 3329, 3439,
-    #3677, 3724, 3792, 3801, 
+    #3677, 3724, 3792, 3801, 4069, 4308, 4417, 4421, 4434
     
     #13:09 - 3500
