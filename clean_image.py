@@ -16,7 +16,8 @@ import helper
 
 
 def clean_image(filename, threshold):
-    image = cv2.imread(filename, cv2.IMREAD_UNCHANGED)
+    image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
+    #image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     if not helper.isbw(image):
         image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         print("changed to bw")
@@ -39,13 +40,13 @@ def clean_image(filename, threshold):
     #print(image)
     
 
-for filename in os.listdir('extracted_letters/workbench'):
-    if filename == '.DS_Store':
-        continue
-    print(filename)
-    clean_image(filename, 150)
-    print('-cleaned')
+#for filename in os.listdir('extracted_letters/workbench'):
+#    if filename == '.DS_Store':
+#        continue
+#    print(filename)
+#    clean_image(filename, 150)
+#    print('-cleaned')
  
     
-clean_image('extracted_letters/workbench/test_0297.jpg', 190)
+clean_image('extracted_letters/workbench/test_0316.jpg', 190)
     
