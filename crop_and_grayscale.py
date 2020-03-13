@@ -35,16 +35,13 @@ def crop_and_gr_img(img, save_to_file=False, filename=None):
         print(filename)
  
 
-
-
-           
-#path = 'extracted_letters/resized_all'
-#folder_to_save = path + '/croppedgr/'
-#for idx, fname in enumerate(os.listdir(path)):
-#    image = cv2.imread(path + '/' + fname, cv2.IMREAD_UNCHANGED)
-#    if not image is None:
-#        filename_to_save = folder_to_save+ str(idx)+ '.jpg'
-#        print(fname)
-#        crop_and_gr_img(image, save_to_file=True, filename=filename_to_save)
+path = 'images/screenshots/resized'
+folder_to_save = path
+for idx, fname in enumerate(os.listdir(path)):
+    image = cv2.imread(path + '/' + fname, cv2.IMREAD_UNCHANGED)
+    if not image is None:
+        filename_to_save = folder_to_save+ str(idx)+ '.jpg'
+        print(fname)
+        crop_and_gr_img(image, save_to_file=True, filename=filename_to_save)
 
 

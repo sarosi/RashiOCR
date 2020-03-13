@@ -22,8 +22,8 @@ def resize_img(img, max_height=24, box_side=32, save_to_file=False, filename=Non
     #plt.show()
 
     #grayscale image
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    print('Grayscaled dimensions: ', gray.shape)
+    #gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    #print('Grayscaled dimensions: ', gray.shape)
     
     # resize image
     height = img.shape[0]
@@ -39,7 +39,7 @@ def resize_img(img, max_height=24, box_side=32, save_to_file=False, filename=Non
         height = int(img.shape[0] * scale_ratio)
     
     dim = (width, height)
-    resized = cv2.resize(gray, dim, interpolation = cv2.INTER_AREA)
+    resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
     
     
     print('Resized dimensions: ', resized.shape) 
@@ -74,7 +74,7 @@ def resize_img(img, max_height=24, box_side=32, save_to_file=False, filename=Non
     if save_to_file:
         cv2.imwrite(filename, resized_with_padding)
             
-path = 'extracted_letters/letters_cong'
+path = 'images/screenshots'
 folder_to_save = path + '/resized/'
 for idx, fname in enumerate(os.listdir(path)):
     image = cv2.imread(path + '/' + fname, cv2.IMREAD_UNCHANGED)
