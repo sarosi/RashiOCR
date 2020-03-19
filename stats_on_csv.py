@@ -13,9 +13,12 @@ import cv2
 import pandas as pd
 from matplotlib import pyplot as plt
 
-df = pd.read_csv('dataset/train/train.csv')
+#df = pd.read_csv('dataset/train/train.csv')
+df = pd.read_csv('dataset/test/test.csv')
 
 def show_stats():
+    d_top = df.head()
+    print(d_top)
     df_grouped_nominal = df['Label'].value_counts()
     df_grouped_percent = df['Label'].value_counts(normalize=True).mul(100).round(1)
     print(pd.concat([df_grouped_nominal, df_grouped_percent], axis=1, keys=['counts', '%']))

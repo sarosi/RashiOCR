@@ -64,8 +64,11 @@ def name_it():
     return char_name
 
 
-path_to_images = 'dataset/train/img'
-csvname = 'dataset/train/train.csv'
+path_to_images_train = 'dataset/train/img'
+csvname_train = 'dataset/train/train.csv'
+
+path_to_images_test = 'dataset/test/img'
+csvname_test = 'dataset/test/test.csv'
 
 def label_them(path_to_images, csvname, start_index):
     with open(csvname, 'a', newline='') as csvfile: 
@@ -94,8 +97,10 @@ def label_them(path_to_images, csvname, start_index):
                 
             #TODO: fix the confirmation bug
         
-label_them('dataset/train/img', 'dataset/train/train.csv', 5574)
+#label_them('dataset/train/img', 'dataset/train/train.csv', 5574)
+label_them(path_to_images_test, csvname_test, 1)
     
+#train:
     #1592, 1715, 1747, 1822, 1828, 1829, 1876, 2042, 2069, 2263, 2317,
     #2695, 2907, 2944, 2963, 3001, 3161, 3180, 3234, 3301, 3329, 3439,
     #3677, 3724, 3792, 3801, 4069, 4308, 4417, 4421, 4434, 4602, 4606,

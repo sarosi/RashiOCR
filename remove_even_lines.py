@@ -40,6 +40,7 @@ def fix_this_csv(csv_with_path, new_csv_with_path):
         #fieldnames = ['Label', 'Filename']
         new_dict = []
         for idx, row in enumerate(csv.reader(old)):
+            print(row[0])
             if len(row) < 2:
                 lbl, fname = row[0].split(";")
             else:
@@ -58,4 +59,4 @@ def fix_this_csv(csv_with_path, new_csv_with_path):
         
             
     
-fix_this_csv('dataset/train/train.csv', 'dataset/train/train_fixed.csv')
+fix_this_csv('dataset/test/test.csv', 'dataset/test/test_fixed.csv')

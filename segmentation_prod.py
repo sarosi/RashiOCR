@@ -16,7 +16,7 @@ import os
 newdirname = "extracted_letters/letters_cong"
 #os.makedirs(newdirname)
 img_dir = 'images'
-img_name = 'IMG_7610'
+img_name = 'shabbos2at'
 img_ext = 'jpg'
 img = cv2.imread(img_dir + '/' + img_name + '.' + img_ext)
 gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
