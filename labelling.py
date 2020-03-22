@@ -110,4 +110,4 @@ label_them(path_to_images_test, csvname_test, 221)
     #13:09 - 3500
     
 #test:
-    #165, 
+    #165, 266, 273, 360, 
