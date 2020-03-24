@@ -74,12 +74,12 @@ def resize_img(img, max_height=24, box_side=32, save_to_file=False, filename=Non
     if save_to_file:
         cv2.imwrite(filename, resized_with_padding)
             
-path = 'images/screenshots'
+path = 'extracted_letters/letters_cong/to_train'
 folder_to_save = path + '/resized/'
 for idx, fname in enumerate(os.listdir(path)):
     image = cv2.imread(path + '/' + fname, cv2.IMREAD_UNCHANGED)
     if not image is None:
-        filename_to_save = folder_to_save+'/cong1_' + str(idx)+ '.jpg'
+        filename_to_save = folder_to_save+'/a_' + str(idx)+ '.jpg'
         resize_img(image, max_height=24, box_side=32, save_to_file=True, filename=filename_to_save)
 
 

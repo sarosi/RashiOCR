@@ -35,7 +35,7 @@ def crop_and_gr_img(img, save_to_file=False, filename=None):
         print(filename)
  
 
-path = 'images/screenshots/resized'
+path = 'extracted_letters/letters_cong/to_train'
 folder_to_save = path
 for idx, fname in enumerate(os.listdir(path)):
     image = cv2.imread(path + '/' + fname, cv2.IMREAD_UNCHANGED)

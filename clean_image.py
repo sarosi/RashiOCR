@@ -40,14 +40,14 @@ def clean_image(filename, threshold):
     #print(image)
     
 
-#for filename in os.listdir('images/screenshots/resized'):
-#    if filename == '.DS_Store':
-#        continue
-#    print(filename)
-#    clean_image(filename, 150)
-#    print('-cleaned')
-# 
+for filename in os.listdir('images/screenshots/resized'):
+    if filename == '.DS_Store':
+        continue
+    print(filename)
+    clean_image(filename, 150)
+    print('-cleaned')
+
     
 #clean_image('extracted_letters/workbench/test_0316.jpg', 190)
     
-clean_image('images/screenshots/resized/resized13.jpg', 190)
+#clean_image('images/screenshots/resized/resized13.jpg', 190)
