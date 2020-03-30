@@ -55,7 +55,7 @@ def full_name_of(character):
             1002: "paspas"
     }
     return switcher.get(character, "no such letter")
-    
+
 
 def name_it():
     lbl = int(input('Name the letter! '))
