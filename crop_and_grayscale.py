@@ -12,14 +12,14 @@ sys.path.append('/usr/local/lib/python3.7/site-packages')
 import cv2
 from matplotlib import pyplot as plt
 import os
-import helper
+import Images as im
 
 def crop_and_gr_img(img, save_to_file=False, filename=None):
     
     print('Original dimensions: ', img.shape)
 
     #grayscale (if needed) and crop image
-    if not helper.isbw(img):
+    if not im.isbw(img):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         cropped = gray[4:28, 4:28]
     else:

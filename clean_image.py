@@ -12,13 +12,13 @@ sys.path.append('/usr/local/lib/python3.7/site-packages')
 import cv2
 from matplotlib import pyplot as plt
 import os
-import helper
+import Images as im
 
 
 def clean_image(filename, threshold):
     image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
     #image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    if not helper.isbw(image):
+    if not im.isbw(image):
         image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         print("changed to bw")
     #print(image)

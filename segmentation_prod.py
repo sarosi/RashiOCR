@@ -11,7 +11,6 @@ sys.path.append('/usr/local/lib/python3.7/site-packages')
 
 import cv2
 from matplotlib import pyplot as plt
-import os
 
 newdirname = "extracted_letters/letters_cong"
 #os.makedirs(newdirname)

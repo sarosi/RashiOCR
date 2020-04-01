@@ -10,9 +10,7 @@ import sys
 sys.path.append('/usr/local/lib/python3.7/site-packages')
 
 import cv2
-import numpy as np
 from matplotlib import pyplot as plt
-import os
 
 img_name = "shabbos2at"
 img_ext = "jpg"

@@ -12,54 +12,20 @@ sys.path.append('/usr/local/lib/python3.7/site-packages')
 import cv2
 from matplotlib import pyplot as plt
 import os
-from os import path
 import re
 import csv
-import helper
+import Images as im
+import Gimatrias as gm
 
 def sorted_alphanumeric(data):
     convert = lambda text: int(text) if text.isdigit() else text.lower()
     alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ] 
     return sorted(data, key=alphanum_key)
 
-def full_name_of(character):
-    switcher = {
-            1: "aleph",
-            2: "beth",
-            3: "gimel",
-            4: "daleth",
-            5: "hey",
-            6: "vav",
-            7: "zayin",
-            8: "chet",
-            9: "tet",
-            10: "yud",
-            20: "chaf",
-            30: "lamed",
-            40: "mem",
-            50: "nun",
-            60: "samech",
-            70: "ayin",
-            80: "pe",
-            90: "tzadi",
-            100: "quf",
-            200: "resh",
-            300: "shin",
-            400: "tav",
-            500: "chaf_sofit",
-            600: "mem_sofit",
-            700: "nun_sofit",
-            800: "pe_sofit",
-            900: "tzadi_sofit",
-            1001: "pas",
-            1002: "paspas"
-    }
-    return switcher.get(character, "no such letter")
-
 
 def name_it():
     lbl = int(input('Name the letter! '))
-    char_name = full_name_of(lbl)
+    char_name = gm.full_name_of(lbl)
     print(char_name)
     return char_name
 
@@ -83,7 +49,7 @@ def label_them(path_to_images, csvname, start_index):
     
             print(fname)
             image = cv2.imread(path_to_images + '/' + fname, cv2.IMREAD_GRAYSCALE)
-            if not helper.isbw(image):
+            if not im.isbw(image):
                 image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
             plt.imshow(image)
             plt.show()
