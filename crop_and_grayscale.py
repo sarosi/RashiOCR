@@ -12,7 +12,7 @@ sys.path.append('/usr/local/lib/python3.7/site-packages')
 import cv2
 from matplotlib import pyplot as plt
 import os
-import Images as im
+from helper import Images as im
 
 def crop_and_gr_img(img, save_to_file=False, filename=None):
     

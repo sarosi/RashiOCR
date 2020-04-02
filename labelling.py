@@ -14,8 +14,8 @@ from matplotlib import pyplot as plt
 import os
 import re
 import csv
-import Images as im
-import Gimatrias as gm
+from helper import Images as im
+from helper import Gimatrias as gm
 
 def sorted_alphanumeric(data):
     convert = lambda text: int(text) if text.isdigit() else text.lower()

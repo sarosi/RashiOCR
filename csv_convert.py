@@ -12,7 +12,7 @@ sys.path.append('/usr/local/lib/python3.7/site-packages')
 import cv2
 import pandas as pd
 import csv
-import Gimatrias as gm
+from helper import Gimatrias as gm
 
 
 columnNames = list()
