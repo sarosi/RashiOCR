@@ -9,6 +9,10 @@ Created on Mon Mar 30 01:27:41 2020
 import tensorflow as tf
 from tensorflow import keras
 import pandas as pd
+import numpy as np
+from helper import Gimatrias as gm
+import csv
+from datetime import datetime
 
 
 train_df = pd.read_csv(f'../dataset/train/train_flat_gim.csv', header=None)
@@ -54,3 +58,34 @@ print('\nTest accuracy:', test_acc)
 probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
 
 predictions = probability_model.predict(test_images)
+
+#<><><><> FINDING THE WRONG PREDICTIONS <><><><>
+def evaluate_mistakes(save_to_csv: False, print_to_screen: True):
+#    num_mistakes = 0
+#    for idx, pred in enumerate(predictions):
+#        if not np.argmax(predictions[idx]) == test_labels[idx]:
+#            print(idx, 'test:', gm.full_name_of(test_labels[idx]), 'prediction:', gm.full_name_of(np.argmax(predictions[idx])))
+#            num_mistakes = num_mistakes+1
+#    print('Number of mistakes = ', num_mistakes)
+    now = datetime.now()
+    dt_string = now.strftime("%Y-%m-%d-%H-%M-%S")
+    if save_to_csv:
+        csvfile = csv.writer(open('evaluate/test_mistakes'+dt_string+'.csv', 'w', newline=''))
+        #fieldnames = ['Reality', 'Prediction']
+        #writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        #csvfile.writeheader()
+    num_mistakes = 0
+    for idx, pred in enumerate(predictions):
+        if not np.argmax(predictions[idx]) == test_labels[idx]:
+            test_example = gm.full_name_of(test_labels[idx])
+            predicted = gm.full_name_of(np.argmax(predictions[idx]))
+            if print_to_screen:
+                print(idx, 'test:', test_example, 'prediction:', predicted)
+            if save_to_csv:
+                row = [test_example, predicted]
+                csvfile.writerow(row)
+            num_mistakes = num_mistakes+1
+    print('Number of mistakes = ', num_mistakes)
+
+evaluate_mistakes(True, True)
+

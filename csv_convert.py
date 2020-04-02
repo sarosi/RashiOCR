@@ -12,40 +12,7 @@ sys.path.append('/usr/local/lib/python3.7/site-packages')
 import cv2
 import pandas as pd
 import csv
-
-def gimatria_of(letter):
-    switcher = {
-            "aleph": 1,
-            "beth": 2,
-            "gimel": 3,
-            "daleth": 4,
-            "hey": 5,
-            "vav": 6,
-            "zayin": 7,
-            "chet": 8,
-            "tet": 9,
-            "yud": 10,
-            "chaf": 20,
-            "lamed": 30,
-            "mem": 40,
-            "nun": 50,
-            "samech": 60,
-            "ayin": 70,
-            "pe": 80,
-            "tzadi": 90,
-            "quf": 100,
-            "resh": 200,
-            "shin": 300,
-            "tav": 400,
-            "chaf_sofit": 500,
-            "mem_sofit": 600,
-            "nun_sofit": 700,
-            "pe_sofit": 800,
-            "tzadi_sofit": 900,
-            "pas": 1001,
-            "paspas": 1002
-        }
-    return switcher.get(letter, "0")
+import Gimatrias as gm
 
 
 columnNames = list()
@@ -71,7 +38,7 @@ for idx, fname in enumerate(df['Filename'].tolist()):
             pixel_value = image[x,y]
             image_array.append(pixel_value)
     label = df.at[idx, 'Label']
-    image_array.insert(0, gimatria_of(label))
+    image_array.insert(0, gm.gimatria_of(label))
     csvfile.writerow(image_array)
         
     

@@ -1,7 +1,0 @@
-import tensorflow as tf
-import pandas as pd
-
-
-train_df = pd.read_csv(f'../dataset/train/train_flat.csv')
-test_df = pd.read_csv(f'../dataset/test/test_flat.csv')
-
