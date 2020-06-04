@@ -10,13 +10,14 @@ import tensorflow as tf
 #from tensorflow import keras
 import keras
 from keras.models import Sequential
-from keras.layers import Dense, Conv2D, Flatten, MaxPooling2D
+from keras.layers import Dense, Conv2D, Flatten, MaxPooling2D, Dropout
 from keras.utils import to_categorical
 import pandas as pd
 import numpy as np
 from helper import Gimatrias as gm
 import csv
 from datetime import datetime
+import os
 
 
 train_df = pd.read_csv(f'../dataset/train/train_flat_gim.csv', header=None)
@@ -56,24 +57,19 @@ test_labels = to_categorical(test_labels)
 #TODO: add paspas to test_data!!!!! and then remove this line
 test_labels = np.hstack((test_labels, np.zeros((test_labels.shape[0], 1), dtype=test_labels.dtype)))
 
-#<><><><> MODEL <><><><>
-#model = keras.Sequential([
-##    keras.layers.InputLayer((24 ,24,1)),
-#    keras.layers.Conv2D(128, kernel_size=3, activation='relu', input_shape = (24,24,1)),
-#    #keras.layers.Dense(128, activation='relu'),
-#    keras.layers.Flatten,
-#    keras.layers.Dense(1003)
-#])
-
 set_image_dim_ordering="th"
+
+#<><><><> MODEL <><><><>
 
 model = keras.Sequential()
 #model.add(keras.layers.InputLayer(()))
 model.add(Conv2D(32, kernel_size=3, activation='relu', input_shape=(24,24,1)))
-model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Conv2D(64, kernel_size=3, activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
 model.add(Flatten())
+model.add(Dense(128, activation='relu'))
+model.add(Dropout(0.5))
 model.add(Dense(1003, activation="softmax"))
 
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
@@ -83,11 +79,12 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 
 model.summary()
 
-model.fit(train_images, train_labels, epochs=3)
+model.fit(train_images, train_labels, epochs=18)
 
 #<><><><> TEST SET <><><><>
-test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
+test_loss, test_acc = model.evaluate(test_images, test_labels, verbose=2)
 
+print('\nTest loss:', test_loss)
 print('\nTest accuracy:', test_acc)
 
 #<><><><> PREDICTIONS <><><><>
@@ -95,16 +92,11 @@ probability_model = keras.Sequential([model, keras.layers.Softmax()])
 
 predictions = probability_model.predict(test_images)
 
+now = datetime.now()
+dt_string = now.strftime("%Y-%m-%d-%H-%M-%S")
+    
 #<><><><> FINDING THE WRONG PREDICTIONS <><><><>
 def evaluate_mistakes(save_to_csv: False, print_to_screen: True):
-#    num_mistakes = 0
-#    for idx, pred in enumerate(predictions):
-#        if not np.argmax(predictions[idx]) == test_labels[idx]:
-#            print(idx, 'test:', gm.full_name_of(test_labels[idx]), 'prediction:', gm.full_name_of(np.argmax(predictions[idx])))
-#            num_mistakes = num_mistakes+1
-#    print('Number of mistakes = ', num_mistakes)
-    now = datetime.now()
-    dt_string = now.strftime("%Y-%m-%d-%H-%M-%S")
     if save_to_csv:
         csvfile = csv.writer(open('evaluate/test_mistakes'+dt_string+'.csv', 'w', newline=''))
         #fieldnames = ['Reality', 'Prediction']
@@ -124,5 +116,23 @@ def evaluate_mistakes(save_to_csv: False, print_to_screen: True):
             num_mistakes = num_mistakes+1
     print('Number of mistakes = ', num_mistakes)
 
+#<><><><> SAVING THE MODEL <><><><>
+def save_my_weights(num_mistakes):
+    modelname = "rashinet" + str(num_mistakes) + "_" + dt_string
+    os.chdir("models")
+    os.mkdir(modelname)
+    os.chdir(modelname)
+    
+    model_yaml = model.to_yaml
+    with open(modelname+".yaml", "w") as yaml_file:
+        yaml_file.write(model_yaml)
+    
+    model_json = model.to_json
+    with open(modelname+".json", "w") as json_file:
+        json_file.write(model_json)
+        
+    model.save_weights(modelname)
+    
+    
 evaluate_mistakes(True, True)
 
