@@ -14,7 +14,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 
 #df = pd.read_csv('dataset/train/train.csv')
-df = pd.read_csv('dataset/test/test.csv')
+df = pd.read_csv('dataset/train/train.csv')
 
 def show_stats():
     d_top = df.head()

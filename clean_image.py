@@ -12,15 +12,15 @@ sys.path.append('/usr/local/lib/python3.7/site-packages')
 import cv2
 from matplotlib import pyplot as plt
 import os
-import Images as im
+#from helper import Images as im
 
 
 def clean_image(filename, threshold):
     image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
-    #image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    if not im.isbw(image):
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        print("changed to bw")
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    #if not im.isbw(image):
+    #    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    #    print("changed to bw")
     #print(image)
     plt.imshow(image)
     plt.show()
@@ -40,11 +40,11 @@ def clean_image(filename, threshold):
     #print(image)
     
 
-for filename in os.listdir('images/screenshots/resized'):
+for filename in os.listdir('dataset/train/img'):
     if filename == '.DS_Store':
         continue
     print(filename)
-    clean_image(filename, 150)
+    clean_image(filename, 100)
     print('-cleaned')
 
     
