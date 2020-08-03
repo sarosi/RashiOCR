@@ -26,11 +26,11 @@ csv_test_pixels = 'dataset/test/test_flat_gim.csv'
 #!!!!! change according to train or test 
 #!!!!! and in csvfile = csv.wrtiter...
 #!!!!! and in image =  cv2.imread...
-df = pd.read_csv(csv_test_fnames)
+df = pd.read_csv(csv_train_fnames)
 
-csvfile = csv.writer(open(csv_test_pixels, 'a', newline=''))
+csvfile = csv.writer(open(csv_train_pixels, 'a', newline=''))
 for idx, fname in enumerate(df['Filename'].tolist()):
-    image = cv2.imread('dataset/test/img/'+fname, cv2.IMREAD_GRAYSCALE)
+    image = cv2.imread('dataset/train/img/'+fname, cv2.IMREAD_GRAYSCALE)
     image_array = []
     height, width = image.shape
     for x in range(0,height):
