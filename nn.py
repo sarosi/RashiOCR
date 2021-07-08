@@ -7,17 +7,19 @@ Created on Mon Mar 30 01:27:41 2020
 """
 
 import tensorflow as tf
-#from tensorflow import keras
 import keras
 from keras.models import Sequential
-from keras.layers import Dense, Conv2D, Flatten, MaxPooling2D, Dropout
+from keras.layers import Dense, Conv2D, Flatten, Dropout, BatchNormalization, MaxPool2D
 from keras.utils import to_categorical
 import pandas as pd
 import numpy as np
 from helper import Gimatrias as gm
-import csv
 from datetime import datetime
 import os
+from keras.optimizers import RMSprop
+from keras.callbacks import ReduceLROnPlateau
+from keras.preprocessing.image import ImageDataGenerator
+
 
 
 train_df = pd.read_csv(f'dataset/train/train_flat_gim.csv', header=None)
@@ -50,23 +52,63 @@ set_image_dim_ordering="th"
 
 model = keras.Sequential()
 #model.add(keras.layers.InputLayer(()))
-model.add(Conv2D(32, kernel_size=3, activation='relu', input_shape=(24,24,1)))
-model.add(Conv2D(64, kernel_size=3, activation='relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.25))
-model.add(Flatten())
-model.add(Dense(128, activation='relu'))
-model.add(Dropout(0.5))
-model.add(Dense(1003, activation="softmax"))
+#model.add(Conv2D(64, kernel_size=3, activation='relu', input_shape=(24,24,1)))
+#model.add(Conv2D(64, kernel_size=3, activation='relu'))
+#model.add(MaxPooling2D(pool_size=(2, 2)))
+#model.add(Conv2D(128, kernel_size=3, activation='relu'))
+#model.add(Conv2D(128, kernel_size=3, activation='relu'))
+#model.add(MaxPooling2D(pool_size=(2, 2)))
+#model.add(Dropout(0.25))
+#model.add(Flatten())
+#model.add(Dense(256, activation='relu'))
+#model.add(Dropout(0.5))
+#model.add(Dense(1003, activation="softmax"))
 
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-#model.compile(optimizer='adam',
-#              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-#              metrics=['accuracy'])
+
+model.add(Conv2D(filters=32, kernel_size=(5,5), padding='Same', activation='relu', input_shape=(24,24,1)))
+model.add(BatchNormalization())
+model.add(Conv2D(filters=32, kernel_size=(5,5), padding='Same', activation='relu'))
+model.add(BatchNormalization())
+model.add(MaxPool2D(pool_size=(2,2)))
+model.add(Dropout(0.25))
+
+model.add(Conv2D(filters=64, kernel_size=(3,3), padding='Same', activation='relu'))
+model.add(BatchNormalization())
+model.add(Conv2D(filters=64, kernel_size=(3,3), padding='Same', activation='relu'))
+model.add(BatchNormalization())
+model.add(MaxPool2D(pool_size=(2,2), strides=(2,2)))
+model.add(Dropout(0.25))
+
+model.add(Flatten())
+model.add(Dense(256, activation='relu'))
+model.add(BatchNormalization())
+model.add(Dense(256, activation='relu'))
+model.add(BatchNormalization())
+model.add(Dropout(0.5))
+model.add(Dense(1003, activation='softmax'))
+
+epochs = 30
+batch_size = 64
+
+optimizer = RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)
+
+model.compile(optimizer = optimizer , loss = "categorical_crossentropy", metrics=["accuracy"])
+#model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+learning_rate_reduction = ReduceLROnPlateau(monitor='val_accuracy', 
+                                            patience=2, 
+                                            verbose=1, 
+                                            factor=0.5, 
+                                            min_lr=0.00001)
 
 model.summary()
 
-model.fit(train_images, train_labels, epochs=30)
+image_gen=ImageDataGenerator(rotation_range=10,width_shift_range=0.1,height_shift_range=0.1,shear_range=0.1,zoom_range=0.1,horizontal_flip=False,vertical_flip=False,fill_mode='nearest')
+
+model.fit_generator(image_gen.flow(train_images, train_labels, batch_size=batch_size), epochs=epochs, validation_data = (test_images, test_labels), callbacks = [learning_rate_reduction])
+
+
+#model.fit(train_images, train_labels, epochs=30)
 
 #<><><><> TEST SET <><><><>
 test_loss, test_acc = model.evaluate(test_images, test_labels, verbose=2)
@@ -81,7 +123,8 @@ predictions = probability_model.predict(test_images)
 
 now = datetime.now()
 dt_string = now.strftime("%Y-%m-%d-%H-%M-%S")
-    
+
+
 #<><><><> FINDING THE WRONG PREDICTIONS <><><><>   
 def evaluate_mistakes(save_to_csv: False, print_to_screen: True):
 #    #if save_to_csv:
@@ -126,3 +169,30 @@ def save_my_weights(num_mistakes):
 evaluate_mistakes(True, True)
 #save_my_weights(num_mistakes)
 
+def freeze_session(session, keep_var_names=None, output_names=None, clear_devices=True):
+    """
+    Freezes the state of a session into a pruned computation graph.
+
+    Creates a new computation graph where variable nodes are replaced by
+    constants taking their current value in the session. The new graph will be
+    pruned so subgraphs that are not necessary to compute the requested
+    outputs are removed.
+    @param session The TensorFlow session to be frozen.
+    @param keep_var_names A list of variable names that should not be frozen,
+                          or None to freeze all the variables in the graph.
+    @param output_names Names of the relevant graph outputs.
+    @param clear_devices Remove the device directives from the graph for better portability.
+    @return The frozen graph definition.
+    """
+    graph = session.graph
+    with graph.as_default():
+        freeze_var_names = list(set(v.op.name for v in tf.global_variables()).difference(keep_var_names or []))
+        output_names = output_names or []
+        output_names += [v.op.name for v in tf.global_variables()]
+        input_graph_def = graph.as_graph_def()
+        if clear_devices:
+            for node in input_graph_def.node:
+                node.device = ""
+        frozen_graph = tf.graph_util.convert_variables_to_constants(
+            session, input_graph_def, output_names, freeze_var_names)
+        return frozen_graph
